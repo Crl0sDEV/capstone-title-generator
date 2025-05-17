@@ -9,6 +9,7 @@ export default function Home() {
   const [keywords, setKeywords] = useState('');
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
+  const [techstack, setTechstack] = useState('');
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -16,7 +17,7 @@ export default function Home() {
     const res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ course, keywords }),
+      body: JSON.stringify({ course, keywords, techstack }),
     });
     const data = await res.json();
     setResult(data.result);
@@ -39,7 +40,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white text-black p-6 flex items-center justify-center font-sans">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-center mb-6">🎓 Capstone Title Generator</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">
+          Capstone Title Generator
+        </h1>
 
         <div className="mb-4">
           <label className="block font-medium mb-1">Select Course:</label>
@@ -76,13 +79,26 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="mb-4">
+          <label className="block font-medium mb-1">
+            Preferred Tech Stack (optional):
+          </label>
+          <input
+            type="text"
+            placeholder="e.g., React, Laravel, Firebase"
+            className="w-full p-2 border rounded"
+            value={techstack}
+            onChange={(e) => setTechstack(e.target.value)}
+          />
+        </div>
+
         <div className="flex items-center gap-4">
           <button
             onClick={handleGenerate}
             className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
             disabled={loading}
           >
-            {loading ? 'Generating...' : 'Generate Titles'}
+            {loading ? "Generating..." : "Generate Titles"}
           </button>
 
           {result && (
