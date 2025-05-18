@@ -1,12 +1,14 @@
 export async function POST(req) {
     const { course, keywords, techstack } = await req.json();
   
+    const trimmedKeywords = (keywords || "").slice(0, 300);     // limit keywords
+    const trimmedTechstack = (techstack || "").slice(0, 200);   // limit tech stack
+  
     const prompt = `
   Generate 3 unique and creative Capstone Project Titles for a ${course} student.
-  Use the following keywords: ${keywords || "any relevant keywords"}.
+  Use the following keywords: ${trimmedKeywords || "any relevant keywords"}.
+  Prefer using this tech stack: ${trimmedTechstack || "any modern technologies"}.
   Make sure each title includes a real-world system or app idea.
-  
-  Prefer using this tech stack: ${techstack || "any modern technologies"}.
   
   Format them as:
   1. ...
@@ -17,22 +19,18 @@ export async function POST(req) {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama3-70b-8192",
+        model: "llama3-8b-8192",
         messages: [{ role: "user", content: prompt }],
+        max_tokens: 400, // ⬅️ limit output to ~3 titles with description
+        temperature: 0.7  // balanced creativity
       }),
     });
   
     const data = await response.json();
-  
-    if (!response.ok) {
-      console.error("Groq API error:", data);
-      return new Response("Error generating titles", { status: 500 });
-    }
-  
     return Response.json({ result: data.choices[0].message.content });
   }
   
