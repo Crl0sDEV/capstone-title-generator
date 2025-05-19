@@ -1,8 +1,8 @@
 export async function POST(req) {
     const { course, keywords, techstack } = await req.json();
   
-    const trimmedKeywords = (keywords || "").slice(0, 300);     // limit keywords
-    const trimmedTechstack = (techstack || "").slice(0, 200);   // limit tech stack
+    const trimmedKeywords = (keywords || "").slice(0, 300);     
+    const trimmedTechstack = (techstack || "").slice(0, 200);   
   
     const prompt = `
   Generate 3 unique and creative Capstone Project Titles for a ${course} student.
@@ -25,8 +25,8 @@ export async function POST(req) {
       body: JSON.stringify({
         model: "llama3-8b-8192",
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 400, // ⬅️ limit output to ~3 titles with description
-        temperature: 0.7  // balanced creativity
+        max_tokens: 400, 
+        temperature: 0.7  
       }),
     });
   
