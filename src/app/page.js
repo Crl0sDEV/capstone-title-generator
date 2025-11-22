@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { jsPDF } from 'jspdf';
 
 const suggestions = ['AI', 'Mobile App', 'Web', 'E-Commerce', 'IoT', 'Chatbot', 'Blockchain'];
@@ -11,15 +11,60 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [techstack, setTechstack] = useState('');
 
+  const [cooldown, setCooldown] = useState(0);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("cooldownUntil");
+    if (saved) {
+      const diff = Math.floor((saved - Date.now()) / 1000);
+      if (diff > 0) setCooldown(diff);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+
+    const interval = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          localStorage.removeItem("cooldownUntil");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [cooldown]);
+
   const handleGenerate = async () => {
+    if (cooldown > 0) return;
+
     setLoading(true);
     setResult('');
+    setErrorMsg("");
+
     const res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ course, keywords, techstack }),
     });
+
     const data = await res.json();
+
+    if (res.status === 429) {
+      const resetTime = data.reset;
+      const seconds = Math.floor((resetTime - Date.now()) / 1000);
+
+      setCooldown(seconds);
+      localStorage.setItem("cooldownUntil", resetTime);
+
+      setErrorMsg("Rate limit reached. Please wait before generating again.");
+      setLoading(false);
+      return;
+    }
+
     setResult(data.result);
     setLoading(false);
   };
@@ -43,6 +88,17 @@ export default function Home() {
         <h1 className="text-3xl font-bold text-center mb-6">
           Capstone Title Generator
         </h1>
+
+        {errorMsg && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 border border-red-300 rounded">
+            {errorMsg}
+            {cooldown > 0 && (
+              <p className="font-semibold mt-1">
+                Try again in {cooldown}s
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="mb-4">
           <label className="block font-medium mb-1">Select Course:</label>
@@ -96,9 +152,13 @@ export default function Home() {
           <button
             onClick={handleGenerate}
             className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
-            disabled={loading}
+            disabled={loading || cooldown > 0}
           >
-            {loading ? "Generating..." : "Generate Titles"}
+            {cooldown > 0
+              ? `Locked (${cooldown}s)`
+              : loading
+              ? "Generating..."
+              : "Generate Titles"}
           </button>
 
           {result && (
