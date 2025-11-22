@@ -20,7 +20,7 @@ export async function POST(req) {
   if (!success) {
     return new Response(
       JSON.stringify({
-        error: "Rate limit reached. Please wait before generating again.",
+        error: "Limit reached. Please wait before generating again.",
         reset, 
       }),
       { status: 429 }
