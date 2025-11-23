@@ -3,19 +3,41 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useCapstone } from "@/hooks/useCapstone";
 import { generatePDF } from "@/utils/pdfHelper";
+import AboutModal from "@/components/AboutModal";
+import HowItWorksModal from "@/components/HowItWorksModal";
 
 // Suggestions Constant
-const SUGGESTIONS = ["AI", "Mobile App", "Web", "E-Commerce", "IoT", "Chatbot", "Blockchain"];
+const SUGGESTIONS = [
+  "AI",
+  "Mobile App",
+  "Web",
+  "E-Commerce",
+  "IoT",
+  "Chatbot",
+  "Blockchain",
+];
 
 export default function Home() {
   const {
-    course, setCourse,
-    keywords, setKeywords,
-    techstack, setTechstack,
-    result, loading, cooldown, errorMsg,
-    showResetModal, setShowResetModal,
-    showInfo, setShowInfo,
-    generateTitles, addKeyword, resetAll
+    course,
+    setCourse,
+    keywords,
+    setKeywords,
+    techstack,
+    setTechstack,
+    result,
+    loading,
+    cooldown,
+    errorMsg,
+    showResetModal,
+    setShowResetModal,
+    showInfo,
+    setShowInfo,
+    showAbout,
+    setShowAbout,
+    generateTitles,
+    addKeyword,
+    resetAll,
   } = useCapstone();
 
   return (
@@ -30,46 +52,29 @@ export default function Home() {
           <h1 className="text-4xl font-semibold tracking-tight mb-2">
             Capstone Title Generator
           </h1>
-          
+
           {/* TOGGLE BUTTON FOR INFO */}
-          <button 
+          <button
             onClick={() => setShowInfo(!showInfo)}
             className="text-sm text-gray-500 hover:text-black underline decoration-dotted underline-offset-4 transition"
           >
             {showInfo ? "Hide Guide" : "How it works & Limits"}
           </button>
 
-          {/* HOW TO USE & LIMIT SECTION */}
-          <AnimatePresence>
-            {showInfo && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden"
-              >
-                <div className="mt-4 p-4 bg-gray-50 rounded-xl text-left text-sm text-gray-600 border border-gray-100">
-                  <p className="font-semibold text-black mb-2">How to use:</p>
-                  <ol className="list-decimal list-inside space-y-1 mb-4 ml-1">
-                    <li>Select your course (BSIT, CS, IS).</li>
-                    <li>Add keywords (e.g., &quot;AI&quot;, &quot;Inventory&quot;) - <i>Optional</i>.</li>
-                    <li>Input your preferred Tech Stack.</li>
-                    <li>Click Generate.</li>
-                  </ol>
-                  
-                  <div className="flex items-start gap-2 p-3 bg-yellow-50 text-yellow-800 rounded-lg text-xs border border-yellow-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mt-0.5 shrink-0">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
-                    </svg>
-                    <span>
-                      <b>Note:</b> To prevent spam, you can only generate titles <b>3 times per hour</b>. Please use your attempts wisely.
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* ABOUT BUTTON */}
+          <button
+            onClick={() => setShowAbout(true)}
+            className="ml-4 text-sm text-gray-500 hover:text-black underline decoration-dotted underline-offset-4 transition"
+          >
+            About
+          </button>
         </div>
+
+        {/* HOW IT WORKS MODAL */}
+        <HowItWorksModal showInfo={showInfo} setShowInfo={setShowInfo} />
+
+        {/* ABOUT MODAL */}
+        <AboutModal showAbout={showAbout} setShowAbout={setShowAbout} />
 
         {/* Error Message */}
         <AnimatePresence>
@@ -81,7 +86,9 @@ export default function Home() {
               className="mb-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-xl text-sm overflow-hidden"
             >
               {errorMsg}
-              {cooldown > 0 && <p className="font-semibold mt-1">Try again in {cooldown}s</p>}
+              {cooldown > 0 && (
+                <p className="font-semibold mt-1">Try again in {cooldown}s</p>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -90,7 +97,9 @@ export default function Home() {
         <div className="space-y-5">
           {/* Course Select */}
           <div>
-            <label className="block text-sm font-medium mb-1">Select Course:</label>
+            <label className="block text-sm font-medium mb-1">
+              Select Course:
+            </label>
             <select
               value={course}
               onChange={(e) => setCourse(e.target.value)}
@@ -104,7 +113,9 @@ export default function Home() {
 
           {/* Keywords */}
           <div>
-            <label className="block text-sm font-medium mb-1">Keywords (optional):</label>
+            <label className="block text-sm font-medium mb-1">
+              Keywords (optional):
+            </label>
             <input
               type="text"
               placeholder="e.g., AI, Web, System"
@@ -128,7 +139,9 @@ export default function Home() {
 
           {/* Tech Stack */}
           <div>
-            <label className="block text-sm font-medium mb-1">Preferred Tech Stack:</label>
+            <label className="block text-sm font-medium mb-1">
+              Preferred Tech Stack:
+            </label>
             <input
               type="text"
               placeholder="e.g., React, Laravel, Firebase"
@@ -144,17 +157,36 @@ export default function Home() {
           <div className="flex items-center gap-5">
             <motion.button
               whileTap={{ scale: cooldown > 0 ? 1 : 0.92 }}
-              animate={cooldown > 0 ? { boxShadow: ["0 0 0px #0000", "0 0 10px #999"], transition: { repeat: Infinity, repeatType: "reverse", duration: 1.2 } } : {}}
+              animate={
+                cooldown > 0
+                  ? {
+                      boxShadow: ["0 0 0px #0000", "0 0 10px #999"],
+                      transition: {
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        duration: 1.2,
+                      },
+                    }
+                  : {}
+              }
               onClick={generateTitles}
               disabled={loading || cooldown > 0}
               className={`flex-1 px-5 py-3 rounded-xl text-white font-medium transition text-center ${
-                cooldown > 0 ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"
+                cooldown > 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-black hover:bg-gray-800"
               }`}
             >
-              {loading ? <span className="animate-pulse">Generating...</span> : cooldown > 0 ? `Locked (${cooldown}s)` : "Generate Titles"}
+              {loading ? (
+                <span className="animate-pulse">Generating...</span>
+              ) : cooldown > 0 ? (
+                `Locked (${cooldown}s)`
+              ) : (
+                "Generate Titles"
+              )}
             </motion.button>
           </div>
-          
+
           {/* Subtle reminder below button */}
           <p className="text-xs text-center text-gray-400">
             Daily Limit: 3 generations per hour
@@ -177,8 +209,19 @@ export default function Home() {
                 className="p-2 rounded-xl bg-black text-white hover:bg-gray-800 transition"
                 title="Download PDF"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375H8.25m0 0L10.5 6m-2.25 2.25L6 6m2.25 2.25v8.25A2.25 2.25 0 0010.5 18h3a2.25 2.25 0 002.25-2.25v-1.5" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375H8.25m0 0L10.5 6m-2.25 2.25L6 6m2.25 2.25v8.25A2.25 2.25 0 0010.5 18h3a2.25 2.25 0 002.25-2.25v-1.5"
+                  />
                 </svg>
               </motion.button>
 
@@ -224,10 +267,22 @@ export default function Home() {
               className="bg-white p-6 rounded-2xl shadow-xl w-[90%] max-w-md text-center"
             >
               <h2 className="text-xl font-semibold mb-3">Are you sure?</h2>
-              <p className="text-gray-600 mb-6">This will clear all inputs and generated titles.</p>
+              <p className="text-gray-600 mb-6">
+                This will clear all inputs and generated titles.
+              </p>
               <div className="flex justify-center gap-4">
-                <button onClick={() => setShowResetModal(false)} className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Cancel</button>
-                <button onClick={resetAll} className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">Yes, Reset</button>
+                <button
+                  onClick={() => setShowResetModal(false)}
+                  className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={resetAll}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+                >
+                  Yes, Reset
+                </button>
               </div>
             </motion.div>
           </motion.div>

@@ -10,6 +10,7 @@ export function useCapstone() {
   const [errorMsg, setErrorMsg] = useState("");
   const [showResetModal, setShowResetModal] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   // Load cooldown on mount
   useEffect(() => {
@@ -95,6 +96,7 @@ export function useCapstone() {
     errorMsg,
     showResetModal, setShowResetModal,
     showInfo, setShowInfo,
+    showAbout, setShowAbout,
     // Actions
     generateTitles,
     addKeyword,
