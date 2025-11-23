@@ -1,8 +1,10 @@
 "use client";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useCapstone } from "@/hooks/useCapstone";
 import { generatePDF } from "@/utils/pdfHelper";
 
+// Suggestions Constant
 const SUGGESTIONS = ["AI", "Mobile App", "Web", "E-Commerce", "IoT", "Chatbot", "Blockchain"];
 
 export default function Home() {
@@ -12,6 +14,7 @@ export default function Home() {
     techstack, setTechstack,
     result, loading, cooldown, errorMsg,
     showResetModal, setShowResetModal,
+    showInfo, setShowInfo,
     generateTitles, addKeyword, resetAll
   } = useCapstone();
 
@@ -23,9 +26,50 @@ export default function Home() {
         transition={{ duration: 0.45, ease: "easeOut" }}
         className="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] w-full max-w-lg sm:max-w-xl md:max-w-2xl"
       >
-        <h1 className="text-4xl font-semibold text-center mb-8 tracking-tight">
-          Capstone Title Generator
-        </h1>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-semibold tracking-tight mb-2">
+            Capstone Title Generator
+          </h1>
+          
+          {/* TOGGLE BUTTON FOR INFO */}
+          <button 
+            onClick={() => setShowInfo(!showInfo)}
+            className="text-sm text-gray-500 hover:text-black underline decoration-dotted underline-offset-4 transition"
+          >
+            {showInfo ? "Hide Guide" : "How it works & Limits"}
+          </button>
+
+          {/* HOW TO USE & LIMIT SECTION */}
+          <AnimatePresence>
+            {showInfo && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-4 p-4 bg-gray-50 rounded-xl text-left text-sm text-gray-600 border border-gray-100">
+                  <p className="font-semibold text-black mb-2">How to use:</p>
+                  <ol className="list-decimal list-inside space-y-1 mb-4 ml-1">
+                    <li>Select your course (BSIT, CS, IS).</li>
+                    <li>Add keywords (e.g., &quot;AI&quot;, &quot;Inventory&quot;) - <i>Optional</i>.</li>
+                    <li>Input your preferred Tech Stack.</li>
+                    <li>Click Generate.</li>
+                  </ol>
+                  
+                  <div className="flex items-start gap-2 p-3 bg-yellow-50 text-yellow-800 rounded-lg text-xs border border-yellow-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mt-0.5 shrink-0">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
+                    </svg>
+                    <span>
+                      <b>Note:</b> To prevent spam, you can only generate titles <b>3 times per hour</b>. Please use your attempts wisely.
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Error Message */}
         <AnimatePresence>
@@ -96,52 +140,59 @@ export default function Home() {
         </div>
 
         {/* Action Area */}
-        <div className="flex items-center gap-5 mt-8">
-          <motion.button
-            whileTap={{ scale: cooldown > 0 ? 1 : 0.92 }}
-            animate={cooldown > 0 ? { boxShadow: ["0 0 0px #0000", "0 0 10px #999"], transition: { repeat: Infinity, repeatType: "reverse", duration: 1.2 } } : {}}
-            onClick={generateTitles}
-            disabled={loading || cooldown > 0}
-            className={`px-5 py-3 rounded-xl text-white font-medium transition ${
-              cooldown > 0 ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"
-            }`}
-          >
-            {loading ? <span className="animate-pulse">Generating...</span> : cooldown > 0 ? `Locked (${cooldown}s)` : "Generate Titles"}
-          </motion.button>
-
-          {/* Floating Controls (PDF & Reset) */}
-          <AnimatePresence>
-            {result && (
-              <motion.div
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 100, opacity: 0 }}
-                className="fixed bottom-5 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl bg-white/60 backdrop-blur-xl shadow-xl border border-white/40 flex items-center gap-4 z-50"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.88 }}
-                  onClick={() => generatePDF(course, result)}
-                  className="p-2 rounded-xl bg-black text-white hover:bg-gray-800 transition"
-                  title="Download PDF"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375H8.25m0 0L10.5 6m-2.25 2.25L6 6m2.25 2.25v8.25A2.25 2.25 0 0010.5 18h3a2.25 2.25 0 002.25-2.25v-1.5" />
-                  </svg>
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => setShowResetModal(true)}
-                  className="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 transition font-medium"
-                >
-                  Reset
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="flex flex-col gap-3 mt-8">
+          <div className="flex items-center gap-5">
+            <motion.button
+              whileTap={{ scale: cooldown > 0 ? 1 : 0.92 }}
+              animate={cooldown > 0 ? { boxShadow: ["0 0 0px #0000", "0 0 10px #999"], transition: { repeat: Infinity, repeatType: "reverse", duration: 1.2 } } : {}}
+              onClick={generateTitles}
+              disabled={loading || cooldown > 0}
+              className={`flex-1 px-5 py-3 rounded-xl text-white font-medium transition text-center ${
+                cooldown > 0 ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"
+              }`}
+            >
+              {loading ? <span className="animate-pulse">Generating...</span> : cooldown > 0 ? `Locked (${cooldown}s)` : "Generate Titles"}
+            </motion.button>
+          </div>
+          
+          {/* Subtle reminder below button */}
+          <p className="text-xs text-center text-gray-400">
+            Daily Limit: 3 generations per hour
+          </p>
         </div>
+
+        {/* Floating Controls (PDF & Reset) */}
+        <AnimatePresence>
+          {result && (
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              className="fixed bottom-5 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl bg-white/60 backdrop-blur-xl shadow-xl border border-white/40 flex items-center gap-4 z-50"
+            >
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.88 }}
+                onClick={() => generatePDF(course, result)}
+                className="p-2 rounded-xl bg-black text-white hover:bg-gray-800 transition"
+                title="Download PDF"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375H8.25m0 0L10.5 6m-2.25 2.25L6 6m2.25 2.25v8.25A2.25 2.25 0 0010.5 18h3a2.25 2.25 0 002.25-2.25v-1.5" />
+                </svg>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowResetModal(true)}
+                className="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 transition font-medium"
+              >
+                Reset
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Result Display */}
         <AnimatePresence>

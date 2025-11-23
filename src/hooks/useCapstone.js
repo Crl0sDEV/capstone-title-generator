@@ -9,6 +9,7 @@ export function useCapstone() {
   const [cooldown, setCooldown] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
 
   // Load cooldown on mount
   useEffect(() => {
@@ -93,6 +94,7 @@ export function useCapstone() {
     cooldown,
     errorMsg,
     showResetModal, setShowResetModal,
+    showInfo, setShowInfo,
     // Actions
     generateTitles,
     addKeyword,
