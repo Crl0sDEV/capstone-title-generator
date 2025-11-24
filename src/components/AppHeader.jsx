@@ -11,7 +11,7 @@ export default function AppHeader({ showInfo, setShowInfo, setShowAbout }) {
         onClick={() => setShowInfo(!showInfo)}
         className="text-sm text-gray-500 hover:text-black underline decoration-dotted underline-offset-4 transition"
       >
-        {showInfo ? "Hide Guide" : "How it works & Limits"}
+        How it works & Limits
       </button>
 
       <button
