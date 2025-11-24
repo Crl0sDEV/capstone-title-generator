@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { cleanResult } from "@/utils/cleanResult";
 
 export function useCapstone() {
   const [course, setCourse] = useState("BSIT");
@@ -59,7 +60,7 @@ export function useCapstone() {
         localStorage.setItem("cooldownUntil", resetTime);
         setErrorMsg("Rate limit reached. Please wait before generating again.");
       } else {
-        setResult(data.result);
+        setResult(cleanResult(data.result));
       }
     } catch (err) {
       setErrorMsg("Something went wrong. Please try again.");
