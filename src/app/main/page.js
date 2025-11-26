@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useCapstone } from "@/hooks/useCapstone";
 
-// Components
 import AppHeader from "@/components/AppHeader";
 import CourseSelect from "@/components/CourseSelect";
 import KeywordsInput from "@/components/KeywordsInput";
