@@ -12,8 +12,8 @@ export function useCapstone() {
   const [showResetModal, setShowResetModal] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [topic, setTopic] = useState("");
 
-  // Load cooldown on mount
   useEffect(() => {
     const saved = localStorage.getItem("cooldownUntil");
     if (saved) {
@@ -22,7 +22,6 @@ export function useCapstone() {
     }
   }, []);
 
-  // Timer logic
   useEffect(() => {
     if (cooldown <= 0) return;
     const interval = setInterval(() => {
@@ -48,7 +47,7 @@ export function useCapstone() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ course, keywords, techstack }),
+        body: JSON.stringify({ course, keywords, techstack,topic }),
       });
 
       const data = await res.json();
@@ -79,6 +78,7 @@ export function useCapstone() {
     setCourse("BSIT");
     setKeywords("");
     setTechstack("");
+    setTopic("");
     setResult("");
     setErrorMsg("");
     setCooldown(0);
@@ -87,7 +87,6 @@ export function useCapstone() {
   };
 
   return {
-    // State
     course, setCourse,
     keywords, setKeywords,
     techstack, setTechstack,
@@ -98,7 +97,8 @@ export function useCapstone() {
     showResetModal, setShowResetModal,
     showInfo, setShowInfo,
     showAbout, setShowAbout,
-    // Actions
+    topic, setTopic,
+
     generateTitles,
     addKeyword,
     resetAll,

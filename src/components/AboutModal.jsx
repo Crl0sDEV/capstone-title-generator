@@ -27,13 +27,17 @@ export default function AboutModal({ showAbout, setShowAbout }) {
               The Capstone Title Generator is designed to help IT, CS, and
               IS students quickly create unique, creative, and system-based
               capstone project titles. It uses AI to generate professional,
-              realistic titles based on your chosen course, keywords, and
+              realistic titles based on your chosen course, problem context, keywords, and
               preferred technologies.
             </p>
 
             <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              Once generated, you can easily <b>Copy to Clipboard</b> or <b>Download as PDF</b> for your documentation.
+            </p>
+
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               This tool includes built-in rate-limiting to keep it fair for
-              everyone. You may generate up to <b>3 titles per hour</b>, and
+              everyone. You may use the generator <b>3 times per hour</b> (producing 3 titles per attempt), and
               the system automatically resets your available attempts.
             </p>
 

@@ -4,7 +4,7 @@ export default function TechStackInput({ techstack, setTechstack }) {
   return (
     <div>
       <label className="block text-sm font-medium mb-1">
-        Preferred Tech Stack:
+        Preferred Tech Stack (Optional):
       </label>
 
       <input

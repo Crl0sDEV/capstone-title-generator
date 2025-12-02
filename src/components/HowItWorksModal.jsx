@@ -29,25 +29,30 @@ export default function HowItWorksModal({ showInfo, setShowInfo }) {
               </p>
 
               <p>
-                <b>2. Enter Keywords</b> — Add specific keywords such as the
-                system type, users, or features.
+                <b>2. Describe the Problem</b> — (Optional) Briefly explain the real-world problem or topic you want to solve (e.g., "Slow barangay queuing").
               </p>
 
               <p>
-                <b>3. Pick your Tech Stack</b> — List technologies you want
-                (React, Laravel, Flutter, Firebase, etc.).
+                <b>3. Enter Keywords</b> — Add specific keywords such as the system type, users, or features.
               </p>
 
               <p>
-                <b>4. Generate AI Titles</b> — Click Generate to get clean,
-                unique, system-based capstone titles.
+                <b>4. Pick your Tech Stack</b> — List technologies you want (React, Laravel, Flutter, Firebase, etc.).
+              </p>
+
+              <p>
+                <b>5. Generate AI Titles</b> — Click Generate to get 3 unique, system-based capstone titles.
+              </p>
+
+              <p>
+                <b>6. Save & Reset</b> — You can <b>Copy</b> the results, <b>Download as PDF</b>, or <b>Reset</b> to start over.
               </p>
             </div>
 
             <div className="mt-6 p-4 bg-gray-100 rounded-xl">
               <h3 className="font-semibold">Rate Limit</h3>
               <p className="text-gray-600 text-sm">
-                You can generate up to <b>3 titles per hour</b>.
+                You can generate titles <b>3 times per hour</b>. Each generation produces 3 unique titles.
               </p>
             </div>
 

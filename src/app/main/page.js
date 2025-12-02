@@ -6,6 +6,7 @@ import { useCapstone } from "@/hooks/useCapstone";
 import AppHeader from "@/components/AppHeader";
 import CourseSelect from "@/components/CourseSelect";
 import KeywordsInput from "@/components/KeywordsInput";
+import TopicInput from "@/components/TopicInput";
 import SuggestionsList from "@/components/SuggestionsList";
 import TechStackInput from "@/components/TechStackInput";
 import ActionButtons from "@/components/ActionButtons";
@@ -33,6 +34,8 @@ export default function Home() {
     setKeywords,
     techstack,
     setTechstack,
+    topic,
+    setTopic,
     result,
     loading,
     cooldown,
@@ -87,6 +90,8 @@ export default function Home() {
         {/* Inputs */}
         <div className="space-y-5">
           <CourseSelect course={course} setCourse={setCourse} />
+
+          <TopicInput topic={topic} setTopic={setTopic}/>
 
           <div>
             <KeywordsInput keywords={keywords} setKeywords={setKeywords} />
