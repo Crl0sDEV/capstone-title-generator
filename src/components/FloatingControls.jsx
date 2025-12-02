@@ -11,7 +11,7 @@ export default function FloatingControls({
 }) {
   if (!result) return null;
 
-  const [popupMessage, setPopupMessage] = useState(""); 
+  const [popupMessage, setPopupMessage] = useState("");
 
   const showPopup = (msg) => {
     setPopupMessage(msg);
@@ -30,39 +30,40 @@ export default function FloatingControls({
 
   return (
     <>
-      {/* MINI POPUP */}
       <AnimatePresence>
         {popupMessage && (
           <motion.div
             key="popup"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 20, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 20, x: "-50%" }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 text-sm font-medium bg-white/80 backdrop-blur-xl text-black shadow-xl rounded-xl z-50 border border-gray-300"
+            className="fixed bottom-28 left-1/2 px-4 py-2 text-sm font-medium bg-black/80 backdrop-blur-md text-white shadow-lg rounded-full z-[60] whitespace-nowrap"
           >
             {popupMessage}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* FLOATING CONTROLS */}
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
-        className="fixed bottom-5 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl bg-white/60 backdrop-blur-xl shadow-xl border border-white/40 flex items-center gap-4 z-50"
+        className="fixed bottom-4 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:bottom-8 z-50
+                   flex items-center justify-between sm:justify-center gap-2 sm:gap-3 
+                   p-2 sm:px-6 sm:py-3 
+                   rounded-2xl bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/50"
       >
         {/* COPY BUTTON */}
         <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.88 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleCopy}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition font-medium"
+          className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-3 sm:py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5"
+            className="w-5 h-5 flex-shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -74,41 +75,58 @@ export default function FloatingControls({
               d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m0 8h2a2 2 0 002-2v-4a2 2 0 00-2-2h-2m-4 10H6a2 2 0 01-2-2v-6a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2z"
             />
           </svg>
-          Copy
+          <span className="text-xs sm:text-sm font-semibold">Copy</span>
         </motion.button>
 
         {/* DOWNLOAD BUTTON */}
         <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.88 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleDownload}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-gray-800 transition font-medium"
+          className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-3 sm:py-2.5 rounded-xl bg-gray-900 text-white hover:bg-black transition shadow-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            strokeWidth={1.5}
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-5 h-5 flex-shrink-0"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+            />
+          </svg>
+          <span className="text-xs sm:text-sm font-semibold">PDF</span>
+        </motion.button>
+
+        {/* RESET BUTTON */}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setShowResetModal(true)}
+          className="flex-none flex items-center justify-center p-3 sm:px-4 sm:py-2.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition border border-gray-200"
+          title="Reset"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
             stroke="currentColor"
             className="w-5 h-5"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375H8.25m0 0L10.5 6m-2.25 2.25L6 6m2.25 2.25v8.25A2.25 2.25 0 0010.5 18h3a2.25 2.25 0 002.25-2.25v-1.5"
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
             />
           </svg>
-          Download
-        </motion.button>
-
-        {/* RESET BUTTON */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setShowResetModal(true)}
-          className="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 transition font-medium"
-        >
-          Reset
+          <span className="hidden sm:inline ml-2 text-sm font-semibold">
+            Reset
+          </span>
         </motion.button>
       </motion.div>
     </>
