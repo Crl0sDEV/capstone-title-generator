@@ -13,6 +13,7 @@ export function useCapstone() {
   const [showInfo, setShowInfo] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const [topic, setTopic] = useState("");
+  const [sdg, setSdg] = useState("");
 
   useEffect(() => {
     const saved = localStorage.getItem("cooldownUntil");
@@ -47,7 +48,7 @@ export function useCapstone() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ course, keywords, techstack,topic }),
+        body: JSON.stringify({ course, keywords, techstack,topic,sdg }),
       });
 
       const data = await res.json();
@@ -79,6 +80,7 @@ export function useCapstone() {
     setKeywords("");
     setTechstack("");
     setTopic("");
+    setSdg("");
     setResult("");
     setErrorMsg("");
     setCooldown(0);
@@ -98,6 +100,7 @@ export function useCapstone() {
     showInfo, setShowInfo,
     showAbout, setShowAbout,
     topic, setTopic,
+    sdg, setSdg,
 
     generateTitles,
     addKeyword,

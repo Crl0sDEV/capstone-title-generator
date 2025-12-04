@@ -7,6 +7,7 @@ import AppHeader from "@/components/AppHeader";
 import CourseSelect from "@/components/CourseSelect";
 import KeywordsInput from "@/components/KeywordsInput";
 import TopicInput from "@/components/TopicInput";
+import SDGSelector from "@/components/SDGSelector";
 import SuggestionsList from "@/components/SuggestionsList";
 import TechStackInput from "@/components/TechStackInput";
 import ActionButtons from "@/components/ActionButtons";
@@ -36,6 +37,8 @@ export default function Home() {
     setTechstack,
     topic,
     setTopic,
+    sdg,
+    setSdg,
     result,
     loading,
     cooldown,
@@ -90,6 +93,8 @@ export default function Home() {
         {/* Inputs */}
         <div className="space-y-5">
           <CourseSelect course={course} setCourse={setCourse} />
+
+          <SDGSelector sdg={sdg} setSdg={setSdg} />
 
           <TopicInput topic={topic} setTopic={setTopic}/>
 

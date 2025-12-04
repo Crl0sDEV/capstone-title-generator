@@ -21,33 +21,37 @@ export async function POST(req) {
     return new Response(
       JSON.stringify({
         error: "Limit reached. Please wait before generating again.",
-        reset, 
+        reset,
       }),
       { status: 429 }
     );
   }
 
-  const { course, keywords, techstack, topic } = await req.json();
+  const { course, keywords, techstack, topic, sdg } = await req.json();
 
   const trimmedKeywords = (keywords || "").slice(0, 300);
   const trimmedTechstack = (techstack || "").slice(0, 200);
   const trimmedTopic = (topic || "").slice(0, 300);
 
   const prompt = `
-  Generate 3 unique and creative Capstone Project Titles for a ${course} student.
+Generate 3 unique and creative Capstone Project Titles for a ${course} student.
 
-  Context & Requirements:
-  - Keywords to include: ${trimmedKeywords || "any relevant keywords"}.
-  - Preferred Tech Stack: ${trimmedTechstack || "any modern technologies"}.
-  - Core Problem/Topic to Solve: ${trimmedTopic ? `"${trimmedTopic}"` : "Focus on a relevant real-world problem in the Philippines"}.
-  
-  Make sure the titles directly address the "Core Problem" mentioned above if provided and includes a real-world system or app idea.
-  
-  Format them as:
-  1. ...
-  2. ...
-  3. ...
-  `;
+Context & Requirements:
+- Keywords to include: ${trimmedKeywords || "any relevant keywords"}.
+- Preferred Tech Stack: ${trimmedTechstack || "any modern technologies"}.
+- Core Problem/Topic to Solve: ${trimmedTopic ? `"${trimmedTopic}"` : "Focus on a relevant real-world problem in the Philippines"}.
+${sdg ? `- **Target SDG (Sustainable Development Goal)**: The solution MUST align with **"${sdg}"**.` : ""}
+
+Instructions:
+1. Make sure the titles directly address the "Core Problem" and "Target SDG" if provided.
+2. Ensure each title includes a specific system, app, or platform idea (e.g., "Web-based...", "Mobile App for...").
+3. Keep the tone professional and academic suitable for a Capstone Project.
+
+Format them strictly as:
+1. ...
+2. ...
+3. ...
+`;
 
   const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
