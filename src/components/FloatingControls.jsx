@@ -54,7 +54,7 @@ export default function FloatingControls({
                    p-2 sm:px-6 sm:py-3 
                    rounded-2xl bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/50"
       >
-        {/* COPY BUTTON */}
+
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -78,7 +78,6 @@ export default function FloatingControls({
           <span className="text-xs sm:text-sm font-semibold">Copy</span>
         </motion.button>
 
-        {/* DOWNLOAD BUTTON */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -102,7 +101,6 @@ export default function FloatingControls({
           <span className="text-xs sm:text-sm font-semibold">PDF</span>
         </motion.button>
 
-        {/* RESET BUTTON */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
